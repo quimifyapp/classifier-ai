@@ -16,7 +16,7 @@ def classifier():
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print("Usage: python classifier-classifier-api.py [data file path]")
+        print("Usage: python api.py [data file path]")
         sys.exit(1)
 
     app.run("0.0.0.0", port=8000)
