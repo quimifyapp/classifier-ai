@@ -5,16 +5,17 @@ app = Flask(__name__)
 
 # Run at startup:
 with open(sys.argv[1], "r") as file:
+    print("Reading data at:", sys.argv[1])
     static_string = file.read()
 
 
-@app.route('/foo')
+@app.route("/foo")
 def classifier():
-    input_parameter = request.args.get('input')
+    input_parameter = request.args.get("input")
     return static_string + input_parameter
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python api.py [data file path]")
         sys.exit(1)
