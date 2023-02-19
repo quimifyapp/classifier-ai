@@ -3,3 +3,11 @@
 /builder/data/organic-formula-name/train/formula/
 /builder/data/organic-formula-name/test/name/
 /builder/data/organic-formula-name/test/formula/
+/builder/data/inorganic-organic-formula-name/train/inorganic-name/
+/builder/data/inorganic-organic-formula-name/train/inorganic-formula/
+/builder/data/inorganic-organic-formula-name/train/organic-name/
+/builder/data/inorganic-organic-formula-name/train/organic-formula/
+/builder/data/inorganic-organic-formula-name/test/inorganic-name/
+/builder/data/inorganic-organic-formula-name/test/inorganic-formula/
+/builder/data/inorganic-organic-formula-name/test/organic-name/
+/builder/data/inorganic-organic-formula-name/test/organic-formula/
