@@ -1,1 +1,5 @@
 /.idea/
+/builder/data/organic-formula-name/train/name/
+/builder/data/organic-formula-name/train/formula/
+/builder/data/organic-formula-name/test/name/
+/builder/data/organic-formula-name/test/formula/
