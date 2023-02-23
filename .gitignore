@@ -11,3 +11,7 @@
 /builder/data/inorganic-organic-formula-name/test/inorganic-formula/
 /builder/data/inorganic-organic-formula-name/test/organic-name/
 /builder/data/inorganic-organic-formula-name/test/organic-formula/
+/builder/data/formula-name/train/formula/
+/builder/data/formula-name/train/name/
+/builder/data/formula-name/test/formula/
+/builder/data/formula-name/test/name/
