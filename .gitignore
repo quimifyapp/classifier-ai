@@ -19,3 +19,7 @@
 /builder/data/formula-inorganic-organic/train/inorganic/
 /builder/data/formula-inorganic-organic/test/organic/
 /builder/data/formula-inorganic-organic/test/inorganic/
+/builder/data/name-inorganic-organic/test/inorganic/
+/builder/data/name-inorganic-organic/test/organic/
+/builder/data/name-inorganic-organic/train/inorganic/
+/builder/data/name-inorganic-organic/train/organic/
