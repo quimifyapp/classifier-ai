@@ -7,7 +7,9 @@ class Predict():
     def __init__(self):
         # Data location
         self.models_dir = os.path.join("..", "builder", "models")
-        self.formula_name_path = os.path.join(self.models_dir, "formula-name-model")
+        self.formula_name_model_path = os.path.join(self.models_dir, "formula-name-model")
+        self.formula_model_path = os.path.join(self.models_dir, "formula-inorganic-organic-model")
+        self.name_model_path = os.path.join(self.models_dir, "name-inorganic-organic-model")
         
         @tf.keras.utils.register_keras_serializable()
         def data_standardization(input_data): # CH3-CH=CH-CH(NO2)Br
@@ -16,14 +18,30 @@ class Predict():
             return tf.strings.regex_replace(input_data, "\s+", ' ') # ch ch ch ch no br
         
         # Load models
-        self.model_formula_name = tf.keras.models.load_model(self.formula_name_path)
-        
+        self.formula_name_model = tf.keras.models.load_model(self.formula_name_model_path)
+        self.formula_model = tf.keras.models.load_model(self.formula_model_path)
+        self.name_model = tf.keras.models.load_model(self.name_model_path)
+    
     def predict(self, example):
-        first_category = "formula"
-        second_category = "name"
+        category = -1
         
-        prediction = self.model_formula_name.predict([example])[0][0] * 100
-        category = first_category if prediction < 50 else second_category
+        # Predicts if it is "name" or "formula"
+        if self.formula_name_model.predict([example])[0][0] * 100 < 50:
+            # Formula
+            if self.formula_model.predict([example])[0][0] * 100 < 50:
+                # Inorganic formula
+                category = 0
+            else:
+                # Organic formula
+                category = 1
+        else:
+            # Name
+            if self.name_model.predict([example])[0][0] * 100 < 50:
+                # Inorganic name
+                category = 2
+            else:
+                # Organic name
+                category = 3
         
         return category
         

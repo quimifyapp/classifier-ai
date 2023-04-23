@@ -10,7 +10,7 @@ model = Predict()
 
 @app.route('/s/predict/<example>')
 def index(example):
-    return model.predict(example)
+    return str(model.predict(example))
 
 if __name__ == '__main__':
     app.run(debug=True)
