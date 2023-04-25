@@ -1,16 +1,17 @@
 #!/usr/bin/python3
 
-import sys
-from flask import Flask, request
-from predict_class import Predict
+from flask import Flask
+from model import Model
 
 app = Flask(__name__)
 
-model = Predict()
+model = Model()
 
-@app.route('/s/predict/<example>')
-def index(example):
-    return str(model.predict(example))
+
+@app.route('/formula-name/<text>')
+def formula_or_name(text):
+    return str(model.predict(text))
+
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True)  # TODO disable
