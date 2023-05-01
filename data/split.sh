@@ -24,7 +24,7 @@ name_inorganic_organic_directory=${destination_directory}/name-inorganic-organic
 
 if [ -d ${formula_inorganic_organic_directory} ] || [ -d ${formula_name_directory} ] ||
   [ -d ${name_inorganic_organic_directory} ]; then # Already existed
-  echo "Error: directory 'source/' seems to contain data."
+  echo "Error: directory '${destination_directory}' seems to contain data."
   exit 1
 fi
 
