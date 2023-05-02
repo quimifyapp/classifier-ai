@@ -6,6 +6,62 @@ from model import Model
 
 app = Flask(__name__)
 
+# Services:
+
+NOT_FOUND_RESULT_CODE = "-1"
+INORGANIC_FORMULA_RESULT_CODE = "0"
+ORGANIC_FORMULA_RESULT_CODE = "1"
+INORGANIC_NAME_RESULT_CODE = "2"
+ORGANIC_NAME_RESULT_CODE = "3"
+
+
+def is_formula(score):
+    return score < 0.5
+
+
+def is_name(score):
+    return score > 0.5
+
+
+def is_inorganic_formula(score):
+    return score < 0.5
+
+
+def is_organic_formula(score):
+    return score > 0.5
+
+
+def is_inorganic_name(score):
+    return score < 0.5
+
+
+def is_organic_name(score):
+    return score > 0.5
+
+
+@app.route('/classify/<text>')
+def classify(text):
+    score = formula_name_model.predict(text)
+
+    if is_formula(score):
+        score = formula_inorganic_organic_model.predict(text)
+
+        if is_inorganic_formula(score):
+            return INORGANIC_FORMULA_RESULT_CODE
+        elif is_organic_formula(score):
+            return ORGANIC_FORMULA_RESULT_CODE
+    elif is_name(score):
+        score = name_inorganic_organic_model.predict(text)
+
+        if is_inorganic_name(score):
+            return INORGANIC_NAME_RESULT_CODE
+        elif is_organic_name(score):
+            return ORGANIC_NAME_RESULT_CODE
+
+    return NOT_FOUND_RESULT_CODE
+
+
+# Test methods:
 
 @app.route('/formula-or-name/<text>')  # Testing
 def formula_or_name(text):
@@ -25,10 +81,7 @@ def name_inorganic_or_organic(text):
     return '{:.10f}'.format(prediction)
 
 
-@app.route('/classify/<text>')
-def classify(text):
-    return "Will classify " + text + " and return a value in {-1, 0, 1, 2, 3}."
-
+# Run at startup:
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
