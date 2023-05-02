@@ -1,4 +1,5 @@
 /.idea/
 /data/split/
+/target/
 /src/builder/__pycache__/
 /src/api/__pycache__/
