@@ -61,7 +61,7 @@ def classify(text):
     return NOT_FOUND_RESULT_CODE
 
 
-# Test methods:
+# Test methods: TODO REMOVE
 
 @app.route('/formula-or-name/<text>')  # Testing
 def formula_or_name(text):
