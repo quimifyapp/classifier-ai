@@ -107,4 +107,4 @@ if __name__ == '__main__':
     name_inorganic_organic_model = Model(name_inorganic_organic_path)
 
     # Run Flask app:
-    app.run()
+    app.run("0.0.0.0", port=8070)
