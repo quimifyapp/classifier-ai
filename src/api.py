@@ -69,7 +69,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # Check if models directory exists:
-    models_directory = sys.argv[1]  # "..", "builder", "models"
+    models_directory = sys.argv[1]
     if not os.path.exists(models_directory):
         print("Error: models directory does not exist.")
         exit()
