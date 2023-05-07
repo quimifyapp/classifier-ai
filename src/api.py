@@ -39,7 +39,7 @@ def is_organic_name(score):
     return score > 0.5
 
 
-@app.route('/classify/<text>')
+@app.route('/<text>')
 def classify(text):
     score = formula_name_model.predict(text)
 
@@ -59,26 +59,6 @@ def classify(text):
             return ORGANIC_NAME_RESULT_CODE
 
     return NOT_FOUND_RESULT_CODE
-
-
-# Test methods: TODO REMOVE
-
-@app.route('/formula-or-name/<text>')  # Testing
-def formula_or_name(text):
-    prediction = formula_name_model.predict(text)
-    return '{:.10f}'.format(prediction)
-
-
-@app.route('/formula-inorganic-or-organic/<text>')  # Testing
-def formula_inorganic_or_organic(text):
-    prediction = formula_inorganic_organic_model.predict(text)
-    return '{:.10f}'.format(prediction)
-
-
-@app.route('/name-inorganic-or-organic/<text>')  # Testing
-def name_inorganic_or_organic(text):
-    prediction = name_inorganic_organic_model.predict(text)
-    return '{:.10f}'.format(prediction)
 
 
 # Run at startup:
