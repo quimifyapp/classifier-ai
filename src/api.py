@@ -44,18 +44,18 @@ def classify(text):
     score = formula_name_model.predict(text)
 
     if is_formula(score):
-        score = formula_inorganic_organic_model.predict(text)
+        formula_score = formula_inorganic_organic_model.predict(text)
 
-        if is_inorganic_formula(score):
+        if is_inorganic_formula(formula_score):
             return INORGANIC_FORMULA_RESULT_CODE
-        elif is_organic_formula(score):
+        elif is_organic_formula(formula_score):
             return ORGANIC_FORMULA_RESULT_CODE
     elif is_name(score):
-        score = name_inorganic_organic_model.predict(text)
+        name_score = name_inorganic_organic_model.predict(text)
 
-        if is_inorganic_name(score):
+        if is_inorganic_name(name_score):
             return INORGANIC_NAME_RESULT_CODE
-        elif is_organic_name(score):
+        elif is_organic_name(name_score):
             return ORGANIC_NAME_RESULT_CODE
 
     return NOT_FOUND_RESULT_CODE
