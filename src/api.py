@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask
+from flask import Flask, request
 from model import Model
 
 app = Flask(__name__)
@@ -39,8 +39,10 @@ def is_organic_name(score):
     return score > 0.5
 
 
-@app.route('/<text>')
-def classify(text):
+@app.route("/")
+def classify():
+    text = request.args.get('input')
+
     score = formula_name_model.predict(text)
 
     if is_formula(score):
