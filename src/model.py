@@ -30,7 +30,7 @@ class Model:
             )
 
     def predict(self, text):
-        return self.model.predict([text])[0][0]
+        return self.model.predict([text], verbose=0)[0][0]
 
     def get(self):
         return self.model
