@@ -11,10 +11,10 @@ app = Flask(__name__)
 
 EMPTY = ""
 
-INORGANIC_FORMULA = "inorganic-formula"
-ORGANIC_FORMULA = "organic-formula"
-INORGANIC_NAME = "inorganic-name"
-ORGANIC_NAME = "organic-name"
+INORGANIC_FORMULA = "inorganicFormula"
+ORGANIC_FORMULA = "organicFormula"
+INORGANIC_NAME = "inorganicName"
+ORGANIC_NAME = "organicName"
 
 
 # Services:
