@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 
@@ -6,14 +7,17 @@ from model import Model
 
 app = Flask(__name__)
 
+# Constants:
+
+EMPTY = ""
+
+INORGANIC_FORMULA = "inorganic-formula"
+ORGANIC_FORMULA = "organic-formula"
+INORGANIC_NAME = "inorganic-name"
+ORGANIC_NAME = "organic-name"
+
+
 # Services:
-
-NOT_FOUND_RESULT_CODE = "-1"
-INORGANIC_FORMULA_RESULT_CODE = "0"
-ORGANIC_FORMULA_RESULT_CODE = "1"
-INORGANIC_NAME_RESULT_CODE = "2"
-ORGANIC_NAME_RESULT_CODE = "3"
-
 
 def is_formula(score):
     return score < 0.5
@@ -39,6 +43,11 @@ def is_organic_name(score):
     return score > 0.5
 
 
+def with_log(text, result):
+    print("\"" + text + "\"", "->", "\"" + result + "\"")
+    return result
+
+
 @app.route("/")
 def classify():
     text = request.args.get('input')
@@ -49,18 +58,18 @@ def classify():
         formula_score = formula_inorganic_organic_model.predict(text)
 
         if is_inorganic_formula(formula_score):
-            return INORGANIC_FORMULA_RESULT_CODE
+            return with_log(text, INORGANIC_FORMULA)
         elif is_organic_formula(formula_score):
-            return ORGANIC_FORMULA_RESULT_CODE
+            return with_log(text, ORGANIC_FORMULA)
     elif is_name(score):
         name_score = name_inorganic_organic_model.predict(text)
 
         if is_inorganic_name(name_score):
-            return INORGANIC_NAME_RESULT_CODE
+            return with_log(text, INORGANIC_NAME)
         elif is_organic_name(name_score):
-            return ORGANIC_NAME_RESULT_CODE
+            return with_log(text, ORGANIC_NAME)
 
-    return NOT_FOUND_RESULT_CODE
+    return with_log(text, EMPTY)
 
 
 # Run at startup:
@@ -89,4 +98,6 @@ if __name__ == '__main__':
     name_inorganic_organic_model = Model(name_inorganic_organic_path)
 
     # Run Flask app:
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.ERROR)
     app.run("0.0.0.0", port=8070)
