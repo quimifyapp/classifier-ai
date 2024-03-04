@@ -16,6 +16,10 @@ ORGANIC_FORMULA = "organicFormula"
 INORGANIC_NAME = "inorganicName"
 ORGANIC_NAME = "organicName"
 
+# Configure logging
+logging.basicConfig(stream=sys.stdout, level=logging.INFO, format='%(message)s')
+logger = logging.getLogger(__name__)
+
 
 # Services:
 
@@ -44,7 +48,7 @@ def is_organic_name(score):
 
 
 def with_log(text, result):
-    print("\"" + text + "\"", "->", "\"" + result + "\"")
+    logger.info("\"" + text + "\" -> \"" + result + "\"")
     return result
 
 
@@ -76,16 +80,16 @@ def classify():
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print("Usage: python api.py [models directory]")
+        logger.error("Usage: python api.py [models directory]")
         sys.exit(1)
 
     # Check if models directory exists:
     models_directory = sys.argv[1]
     if not os.path.exists(models_directory):
-        print("Error: models directory does not exist.")
-        exit()
+        logger.error("Error: models directory does not exist.")
+        sys.exit(1)
 
-    print("Importing models from directory:", models_directory)
+    logger.info("Importing models from directory: %s", models_directory)
 
     # Locate models:
     formula_name_path = os.path.join(models_directory, "formula-name-model")
