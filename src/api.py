@@ -27,7 +27,7 @@ YELLOW = "\033[93m"
 MAGENTA = "\033[95m"
 RED = "\033[91m"
 
-UNKNOWN_TAG = colored("Unknown\t\t", RED)
+UNKNOWN_TAG = colored("Unknown", RED)
 INORGANIC_TAG = colored("Inorganic", BLUE)
 ORGANIC_TAG = colored("Organic", GREEN)
 FORMULA_TAG = colored("Formula", YELLOW)
@@ -42,11 +42,11 @@ class Result:
         self.tag = tag
 
 
-UNKNOWN = Result("", UNKNOWN_TAG)
-INORGANIC_FORMULA = Result("inorganicFormula", INORGANIC_TAG + " " + FORMULA_TAG)
-ORGANIC_FORMULA = Result("organicFormula", ORGANIC_TAG + " " + FORMULA_TAG)
-INORGANIC_NAME = Result("inorganicName", INORGANIC_TAG + " " + NAME_TAG)
-ORGANIC_NAME = Result("organicName", ORGANIC_TAG + " " + NAME_TAG)
+UNKNOWN = Result("", UNKNOWN_TAG + " " * 12)
+INORGANIC_FORMULA = Result("inorganicFormula", INORGANIC_TAG + " | " + FORMULA_TAG)
+ORGANIC_FORMULA = Result("organicFormula", ORGANIC_TAG + " " * 2 + " | " + FORMULA_TAG)
+INORGANIC_NAME = Result("inorganicName", INORGANIC_TAG + " | " + NAME_TAG + " " * 3)
+ORGANIC_NAME = Result("organicName", ORGANIC_TAG + " " * 2 + " | " + NAME_TAG + " " * 3)
 
 
 @app.route("/")
@@ -71,7 +71,7 @@ def classify():
         elif name_prediction > 0.5:
             result = ORGANIC_NAME
 
-    logger.info("{}\t<- {}".format(result.tag, '"' + input_text + '"'))
+    logger.info("{} <- {}".format(result.tag, '"' + input_text + '"'))
 
     return result.response
 
