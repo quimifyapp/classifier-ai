@@ -7,80 +7,73 @@ from model import Model
 
 app = Flask(__name__)
 
-# Constants:
+# Logging:
 
-UNKNOWN = ""
+CONTENT_FORMAT = '%(asctime)s - %(message)s'
+DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 
-INORGANIC_FORMULA = "inorganicFormula"
-ORGANIC_FORMULA = "organicFormula"
-INORGANIC_NAME = "inorganicName"
-ORGANIC_NAME = "organicName"
-
-# Configure logging
-logging.basicConfig(stream=sys.stdout, level=logging.INFO, format='%(message)s')
+logging.basicConfig(stream=sys.stdout, level=logging.INFO, format=CONTENT_FORMAT, datefmt=DATE_FORMAT)
 logger = logging.getLogger(__name__)
+
+
+def colored(text, color):
+    reset_color = "\033[0m"
+    return color + text + reset_color
+
+
+BLUE = "\033[94m"
+GREEN = "\033[92m"
+YELLOW = "\033[93m"
+MAGENTA = "\033[95m"
+RED = "\033[91m"
+
+UNKNOWN_TAG = colored("Unknown\t\t", RED)
+INORGANIC_TAG = colored("Inorganic", BLUE)
+ORGANIC_TAG = colored("Organic", GREEN)
+FORMULA_TAG = colored("Formula", YELLOW)
+NAME_TAG = colored("Name", MAGENTA)
 
 
 # Services:
 
-def is_formula(score):
-    return score < 0.5
+class Result:
+    def __init__(self, response, tag):
+        self.response = response
+        self.tag = tag
 
 
-def is_name(score):
-    return score > 0.5
-
-
-def is_inorganic_formula(score):
-    return score < 0.5
-
-
-def is_organic_formula(score):
-    return score > 0.5
-
-
-def is_inorganic_name(score):
-    return score < 0.5
-
-
-def is_organic_name(score):
-    return score > 0.5
-
-
-def with_log(input_text, result):
-    label = "unknown" if result == UNKNOWN else result
-
-    red = "\033[91m"
-    green = "\033[92m"
-    color = red if result == UNKNOWN else green
-
-    logger.info("{:<25} <- {}".format(color + label + "\033[0m", '"' + input_text + '"'))
-
-    return result
+UNKNOWN = Result("", UNKNOWN_TAG)
+INORGANIC_FORMULA = Result("inorganicFormula", INORGANIC_TAG + " " + FORMULA_TAG)
+ORGANIC_FORMULA = Result("organicFormula", ORGANIC_TAG + " " + FORMULA_TAG)
+INORGANIC_NAME = Result("inorganicName", INORGANIC_TAG + " " + NAME_TAG)
+ORGANIC_NAME = Result("organicName", ORGANIC_TAG + " " + NAME_TAG)
 
 
 @app.route("/")
 def classify():
+    result = UNKNOWN
+
     input_text = request.args.get('input')
+    prediction = formula_name_model.predict(input_text)
 
-    score = formula_name_model.predict(input_text)
+    if prediction < 0.5:
+        formula_prediction = formula_inorganic_organic_model.predict(input_text)
 
-    if is_formula(score):
-        formula_score = formula_inorganic_organic_model.predict(input_text)
+        if formula_prediction < 0.5:
+            result = INORGANIC_FORMULA
+        elif formula_prediction > 0.5:
+            result = ORGANIC_FORMULA
+    elif prediction > 0.5:
+        name_prediction = name_inorganic_organic_model.predict(input_text)
 
-        if is_inorganic_formula(formula_score):
-            return with_log(input_text, INORGANIC_FORMULA)
-        elif is_organic_formula(formula_score):
-            return with_log(input_text, ORGANIC_FORMULA)
-    elif is_name(score):
-        name_score = name_inorganic_organic_model.predict(input_text)
+        if name_prediction < 0.5:
+            result = INORGANIC_NAME
+        elif name_prediction > 0.5:
+            result = ORGANIC_NAME
 
-        if is_inorganic_name(name_score):
-            return with_log(input_text, INORGANIC_NAME)
-        elif is_organic_name(name_score):
-            return with_log(input_text, ORGANIC_NAME)
+    logger.info("{}\t<- {}".format(result.tag, '"' + input_text + '"'))
 
-    return with_log(input_text, UNKNOWN)
+    return result.response
 
 
 # Run at startup:
