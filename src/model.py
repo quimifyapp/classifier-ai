@@ -34,3 +34,8 @@ class Model:
 
     def get(self):
         return self.model
+
+    @staticmethod
+    def cleanup():
+        # Otherwise there's a memory leak
+        tf.keras.backend.clear_session()

@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 
-from flask import Flask, request
+from flask import Flask, request, after_this_request
 from model import Model
 
 app = Flask(__name__)
@@ -71,7 +71,11 @@ def classify():
         elif name_prediction > 0.5:
             result = ORGANIC_NAME
 
-    logger.info("{} <- {}".format(result.tag, '"' + input_text + '"'))
+    @after_this_request
+    def after_request(response):
+        Model.cleanup()  # Must be called
+        logger.info("{} <- {}".format(result.tag, '"' + input_text + '"'))
+        return response
 
     return result.response
 
